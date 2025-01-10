@@ -1,6 +1,5 @@
-# MedFound
 ## Description
-The accurate diagnosis is crucial in healthcare. Here, we introduce MedFound, which is a medical large language model (Medical LLM) pretrained on medical text and real-world clinical records. We fine-tuned MedFound using a self-bootstrapping strategy to learn diagnostic reasoning and incorporated a preference alignment framework to align with standard clinical practice. Our approach results in MedFound-DX-PA, a LLM based diagnostic system that aligns with clinical requirements. This repository contains the code used for data preprocessing, model development, and evaluation in our study (Development and evaluation of diagnostic generalist cross specialties using medical large language model).
+The accurate diagnosis is crucial in healthcare. Here, we introduce MedFound, which is a medical large language model (Medical LLM) pretrained on medical text and real-world clinical records. We fine-tuned MedFound using a self-bootstrapping strategy to learn diagnostic reasoning and incorporated a preference alignment framework to align with standard clinical practice. Our approach results in MedFound-DX-PA, a LLM based diagnostic system that aligns with clinical requirements. This repository contains the code used for data preprocessing, model development, and evaluation in our study (A Generalist Medical Language Model for Disease Diagnosis Assistance).
 
 ## Code Structure
 - `config/`: Configuration files for training and evaluation
@@ -24,3 +23,27 @@ The accurate diagnosis is crucial in healthcare. Here, we introduce MedFound, wh
 - `run_pretrain.py`: The script for pretraining.
 - `requirements.txt`: List of required dependencies
 - `README.md`: This README file
+
+## Run Demo
+The model for the demo can be downloaded from [Huggingface](https://huggingface.co/medicalai/MedFound-Llama3-8B-finetuned). More models can be found here: [MedFound-7B](https://huggingface.co/medicalai/MedFound-7B) and [MedFound-176B](https://huggingface.co/medicalai/MedFound-176B).
+
+```python
+import torch
+import pandas as pd
+from transformers import AutoTokenizer, AutoModelForCausalLM
+
+model_path = "./MedFound-Llama3-8B-finetuned"
+tokenizer = AutoTokenizer.from_pretrained(model_path)
+model = AutoModelForCausalLM.from_pretrained(model_path, device_map="auto")
+data = pd.read_json('data/test.zip', lines=True).iloc[1]
+
+input_text = f"### User:{data['context']}\n\nPlease provide a detailed and comprehensive diagnostic analysis of this medical record.\n### Assistant:"
+input_ids = tokenizer.encode(input_text, return_tensors="pt", add_special_tokens=False)
+output_ids = model.generate(input_ids, max_new_tokens=200, temperature=0.7, do_sample=True).to(model.device)
+generated_text = tokenizer.decode(output_ids[0,len(input_ids[0]):], skip_special_tokens=True)
+print("Generated Output:\n", generated_text)
+```
+
+## Citation
+Please cite this article:  
+Wang, G., Liu, X., Liu, H., Yang, G. et al. A Generalist Medical Language Model for Disease Diagnosis Assistance. Nat Med (2025). https://doi.org/10.1038/s41591-024-03416-6
