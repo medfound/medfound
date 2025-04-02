@@ -35,14 +35,8 @@ tokenizer = AutoTokenizer.from_pretrained(model_path)
 model = AutoModelForCausalLM.from_pretrained(model_path, device_map="auto")
 data = pd.read_json('data/test.zip', lines=True).iloc[1]
 prompt = f"{data["context"]}\n\nPlease provide a detailed and comprehensive diagnostic analysis of this medical record, and give the diagnostic results.\n"
-messages = [
-    {"role": "user", "content": prompt}
-]
-text = tokenizer.apply_chat_template(
-    messages,
-    tokenize=False,
-    add_generation_prompt=True
-)
+messages = [{"role": "user", "content": prompt}]
+text = tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
 input_ids = tokenizer([text], return_tensors="pt").to(model.device)
 output_ids = model.generate(**input_ids, max_new_tokens=2048, temperature=0.7, do_sample=True).to(model.device)
 generated_text = tokenizer.decode(output_ids[0,len(input_ids[0]):], skip_special_tokens=True)
