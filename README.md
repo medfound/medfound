@@ -30,7 +30,7 @@ The model for the demo can be downloaded from [Huggingface](https://huggingface.
 ```python
 import pandas as pd
 from transformers import AutoTokenizer, AutoModelForCausalLM
-model_path = "medicalai/MedFound-R1-Qwen-7B-CN-preview"
+model_path = "medicalai/MedFound-R1-Qwen-7B-EN-preview"
 tokenizer = AutoTokenizer.from_pretrained(model_path)
 model = AutoModelForCausalLM.from_pretrained(model_path, device_map="auto")
 data = pd.read_json('data/test.zip', lines=True).iloc[1]
