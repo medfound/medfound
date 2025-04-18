@@ -25,12 +25,12 @@ The accurate diagnosis is crucial in healthcare. Here, we introduce MedFound, wh
 - `README.md`: This README file
 
 ## Run Demo
-The model for the demo can be downloaded from [Huggingface](https://huggingface.co/medicalai/MedFound-Llama3-8B-finetuned). More models can be found here: [MedFound-7B](https://huggingface.co/medicalai/MedFound-7B), [MedFound-Llama3-8B-finetuned](https://huggingface.co/medicalai/MedFound-Llama3-8B-finetuned), [MedFound-R1-Qwen-7B-EN-preview](https://huggingface.co/medicalai/MedFound-R1-Qwen-7B-EN-preview) and [MedFound-176B](https://huggingface.co/medicalai/MedFound-176B).
+The model for the demo can be downloaded from [Huggingface](https://huggingface.co/medicalai/MedFound-Llama3-8B-finetuned). More models can be found here: [MedFound-7B](https://huggingface.co/medicalai/MedFound-7B), [MedFound-Llama3-8B-finetuned](https://huggingface.co/medicalai/MedFound-Llama3-8B-finetuned), [ClinicalGPT-R1-Qwen-7B-EN-preview](https://huggingface.co/medicalai/ClinicalGPT-R1-Qwen-7B-EN-preview) and [MedFound-176B](https://huggingface.co/medicalai/MedFound-176B).
 
 ```python
 import pandas as pd
 from transformers import AutoTokenizer, AutoModelForCausalLM
-model_path = "medicalai/MedFound-R1-Qwen-7B-EN-preview"
+model_path = "medicalai/ClinicalGPT-R1-Qwen-7B-EN-preview"
 tokenizer = AutoTokenizer.from_pretrained(model_path)
 model = AutoModelForCausalLM.from_pretrained(model_path, device_map="auto")
 data = pd.read_json('data/test.zip', lines=True).iloc[1]
